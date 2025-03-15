@@ -9,6 +9,8 @@ import com.epam.aidial.core.server.service.ResourceNotFoundException;
 import com.epam.aidial.core.server.util.ProxyUtil;
 import com.epam.aidial.core.server.vertx.stream.BufferingReadStream;
 import com.epam.aidial.core.storage.http.HttpStatus;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
 import io.vertx.core.buffer.Buffer;
@@ -83,7 +85,7 @@ public class DeploymentFeatureController {
     @SneakyThrows
     private void sendRequest(String endpoint) {
         RequestOptions options = new RequestOptions()
-                .setAbsoluteURI(new URL(endpoint))
+                .setAbsoluteURI(Urls.create(endpoint, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS))
                 .setMethod(context.getRequest().method());
 
         proxy.getClient().request(options)
