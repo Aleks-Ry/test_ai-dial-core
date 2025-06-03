@@ -1,5 +1,6 @@
 package com.epam.aidial.core.storage.blobstore;
 
+import io.github.pixee.security.BoundedLineReader;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
@@ -24,7 +25,7 @@ public class MimeMapping {
         try (InputStream stream = Objects.requireNonNull(MimeMapping.class.getResourceAsStream("/mime.types"))) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                 String[] parts = line.split(" ");
                 mapping.put(parts[0], parts[1]);
             }
