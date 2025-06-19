@@ -8,6 +8,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.Verification;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
@@ -116,7 +118,7 @@ public class IdentityProvider {
             }
         } else {
             try {
-                userInfoUrl = new URL(userinfoEndpoint);
+                userInfoUrl = Urls.create(userinfoEndpoint, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             } catch (MalformedURLException e) {
                 throw new IllegalArgumentException(e);
             }
